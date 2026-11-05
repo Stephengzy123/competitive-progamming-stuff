@@ -8,13 +8,38 @@ while(low <= high) {
 }
 ```
 
-### Djikstra's Algorithm (unfinished)
+### Dijkstra's Algorithm (unfinished)
 
 ```
+typedef long long ll;
+typedef pair<ll, int> pli;
+
+
+vector<ll> dijkstra(int n, vector<vector<pli>>& graph, int start) { // fistance first, then second node (for priority queue)
+    vector<ll> dist(n, numeric_limits<ll>::max()); // or set to max ll
+    dist[start] = 0;
+    priority_queue<pli, vector<pli>, greater<pli>> heap;
+    heap.push({0, start});
+    while (!heap.empty()) {
+        auto [l, node] = heap.top();
+        heap.pop();
+        if (l > dist[node]) continue;
+        for (auto [length_away, end_node] : graph[node]) {
+            if (dist[node] + length_away < dist[end_node]) {
+                dist[end_node] = dist[node] + length_away;
+                heap.push({dist[end_node], end_node});
+            }
+        }
+    }
+    return dist;
+}
 ```
 
 ### Disjoint Sets (Union-Find) without Union-by-Rank (legacy)
 ```
+struct State {
+
+}
 int find_parent(int a, vector<int> &parent) {
     if (parent[a] == a) {
         return a;
@@ -188,3 +213,7 @@ int main() {
     return 0;
 }
 ```
+
+### Input File (for testing sample cases faster)
+filename > input.txt to pipe file into input file
+even better just freopen("input file", "r", stdin);
