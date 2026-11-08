@@ -215,8 +215,9 @@ int main() {
 ```
 
 ### Input File (for testing sample cases faster)
-filename > input.txt to pipe file into input file
-even better just freopen("input file", "r", stdin);
+`filename > input.txt` to pipe file into input file
+
+even better just `freopen("input file", "r", stdin);`
 
 ### Topological Sort
 ```cpp
