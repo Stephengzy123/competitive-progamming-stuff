@@ -10,7 +10,7 @@ while(low <= high) {
 
 ### Dijkstra's Algorithm (unfinished)
 
-```
+```cpp
 typedef long long ll;
 typedef pair<ll, int> pli;
 
@@ -36,7 +36,7 @@ vector<ll> dijkstra(int n, vector<vector<pli>>& graph, int start) { // fistance 
 ```
 
 ### Disjoint Sets (Union-Find) without Union-by-Rank (legacy)
-```
+```cpp
 struct State {
 
 }
@@ -61,7 +61,7 @@ void create_set(int a, vector<int> &parent) {
 
 ### Union-by-Rank with Path Compression
 
-```
+```cpp
 #include <bits/stdc++.h>
 typedef long long ll;
 using namespace std;
@@ -100,7 +100,7 @@ int main() {
 ### Union-by-Rank with DeUnion
 This is very verbose, can be re-written much cleaner like Union-Rank w/ Path Compression is written.
 
-```
+```cpp
 // must include <stack> and <tuple>
 
 stack<tuple<int, int, bool>> parent_history; // index, previous, rank_change?
@@ -155,7 +155,7 @@ void de_union(vector<int> &parent, vector<int> &rank) {
 
 ### Kruskal's Algorithm for MST
 Again, very verbose but it is the basic structure of Kruskal's.
-```
+```cpp
 struct Edge {
     int n1, n2, length;
     bool operator<(const Edge& other) const {
@@ -203,7 +203,7 @@ vector<Edge> findMST(vector<Edge> edges, vector<int> &parent, int nodes) { // as
 ```
 
 ### Easy Set-up Template
-```
+```cpp
 #include <bits/stdc++.h>
 typedef long long ll;
 using namespace std;
@@ -217,3 +217,54 @@ int main() {
 ### Input File (for testing sample cases faster)
 filename > input.txt to pipe file into input file
 even better just freopen("input file", "r", stdin);
+
+### Topological Sort
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> topo_sort(int n, vector<vector<int>>& graph) {
+    vector<int> indegree(n, 0);
+    deque<int> queue;
+    // priority_queue<int, vector<int>, greater<int>> queue; // Min-heap for lexicographically smallest order
+
+    for (int i = 0; i < n; i++) {
+        for (int neighbor : graph[i]) {
+            indegree[neighbor]++;
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (indegree[i] == 0) {
+            queue.push_back(i);
+        }
+    }
+
+    vector<int> order;
+    while (!queue.empty()) {
+        int u = queue.front();
+        queue.pop_front();
+
+        // For min-heap: use queue.top(), queue.pop(), and queue.push() instead
+
+        for (int v : graph[u]) {
+            indegree[v]--;
+            if (indegree[v] == 0) {
+                queue.push_back(v);
+            }
+        }
+        order.push_back(u);
+    }
+
+    // If order.size() != n, graph contains a cycle
+    return order;
+}
+```
+
+### Random stuff
+
+Yeah so g++ and clang++ work very differently:
+- Using optimizations such as `cin.tie(0)->sync_with_stdio(0)` work differently, in clang++ it detects an interactive terminal screen and doesn't wait with the optimization of `"\n"`. In g++ this causes a TLE on interactive problems as both optimizations prevent flushing output until the very end.
+- g++ has built-in `__gnu_pbds` namespace with some neat advanced functions
+
+Some quirks is that avoid using `endl` (for all c++ compilers), even in interactive problems just take out the sync optimzation (for g++).
